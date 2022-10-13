@@ -1,19 +1,47 @@
 <?php
+include_once './DijkstraInterface.php';
 
-class Dijkstra
+class Dijkstra implements DijkstraInterface
 {
 
+
     private const INFINITY = 1e9;
+
+    /**
+     * @var Graph
+     */
     private $graph;
+
+    /**
+     * @var array
+     */
     private $used = []; //Список вершин, в которых уже были
+
+    /**
+     * @var array
+     */
     private $esum = []; //Накопленные суммы
+
+    /**
+     * @var array
+     */
     private $path = [];
 
+
+    /**
+     * @param Graph $graph
+     */
     public function __construct(Graph $graph)
     {
         $this->graph = $graph;
     }
 
+
+    /**
+     * @param string $frNode
+     * @param string $toNode
+     * @return string
+     */
     public function getShortestPath(string $frNode, string $toNode): string
     {
         $this->init();
@@ -23,6 +51,10 @@ class Dijkstra
         return $this->restorePath($frNode, $toNode);
     }
 
+
+    /**
+     * @return void
+     */
     function init(): void
     {
         foreach ($this->graph->getNodes() as $node) {
@@ -32,6 +64,10 @@ class Dijkstra
         }
     }
 
+
+    /**
+     * @return string
+     */
     function findNearestUnusedNode(): string
     {
         $nearestNode = '';
@@ -44,6 +80,11 @@ class Dijkstra
         return $nearestNode;
     }
 
+
+    /**
+     * @param string $currNode
+     * @return void
+     */
     function setEsumToNextNodes(string $currNode): void
     {
         $this->used[$currNode] = true;
@@ -61,6 +102,12 @@ class Dijkstra
 
     }
 
+
+    /**
+     * @param string $frNode
+     * @param string $toNode
+     * @return string
+     */
     function restorePath(string $frNode, string $toNode): string
     {
         $path = $toNode;
